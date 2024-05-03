@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage
+    spec:
+      containers:
+        - name: backstage
+          image: crbackstagebook001.azurecr.io/backstageimage:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7007
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: postgres_password
+            - name: GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: github_clientId
+            - name: GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: github_clientSecret
+            - name: GITHUB_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: appId
+            - name: GITHUB_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: appPrivateKey
+            - name: BACKEND_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: backstage_secret
+            - name: AZURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: azure_client_id
+            - name: AZURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: azure_client_secret
+            - name: AZURE_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: azure_tenant_id
