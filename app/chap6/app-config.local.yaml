@@ -1,0 +1,65 @@
+app:
+  title: Scaffolded Backstage App
+  baseUrl: http://localhost:3000
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  # See https://backstage.io/docs/auth/service-to-service-auth for
+  # information on the format
+  auth:
+    keys:
+      - secret: ${BACKEND_SECRET}
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+    # Uncomment the following host directive to bind to specific interfaces
+    # host: 127.0.0.1
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+  cors:
+    origin: http://localhost:3000
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    # config options: https://node-postgres.com/apis/client
+    client: pg
+    connection:
+      host: localhost
+      port: 5432
+      user: postgres
+      password: secret
+
+auth:
+  # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${GITHUB_CLIENT_ID}
+        clientSecret: ${GITHUB_CLIENT_SECRET}
+        ## uncomment if using GitHub Enterprise
+        # enterpriseInstanceUrl: ${AUTH_GITHUB_ENTERPRISE_INSTANCE_URL} 
+        signIn:
+          resolvers:
+          - resolver: usernameMatchingUserEntityName
+
+integrations:
+  github:
+    - host: github.com
+      apps:
+        - $include: github-credentials.yaml
+
+catalog:
+  providers:
+    githubOrg:
+      id: 'github-local'
+      githubUrl: 'https://github.com/backstage-book-org'
+      schedule:
+        frequency:
+          minutes: 60
+        timeout:
+          minutes: 5
+        initialDelay:
+          seconds: 10
