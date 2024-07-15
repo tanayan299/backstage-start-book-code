@@ -56,7 +56,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: app-secret-from-vso
-                  key: backstage_secret
+                  key: backend_secret
             - name: AZURE_CLIENT_ID
               valueFrom:
                 secretKeyRef:
