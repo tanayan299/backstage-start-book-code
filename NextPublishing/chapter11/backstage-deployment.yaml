@@ -16,6 +16,7 @@ spec:
     spec:
       containers:
         - name: backstage
+          # Imageの更新に合わせてバージョンを変更
           image: ghcr.io/<GitHubユーザー名>/backstageimage:v1
           imagePullPolicy: IfNotPresent
           ports:

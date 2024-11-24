@@ -58,5 +58,31 @@ spec:
                 secretKeyRef:
                   name: app-secret-from-vso
                   key: backend_secret
+            # - name: K3S_TOKEN
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: app-secret-from-vso
+            #       key: kube_cluster_token
+            # Multi Cluster 環境を可視化する際は以下を追記
+            # - name: K3S_TOKEN2
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: app-secret-from-vso
+            #       key: kube_cluster_token
+            - name: AZURE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: azure_client_id
+            - name: AZURE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: azure_client_secret
+            - name: AZURE_TENANT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: azure_tenant_id
       imagePullSecrets:
         - name: regcred
