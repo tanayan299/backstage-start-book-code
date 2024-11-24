@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: sample-nginx
+  description: An example of a nginx application.
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    backstage.io/kubernetes-label-selector: 'app=backstage-sample-nginx'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: e.g. <org_name>/<team_name>

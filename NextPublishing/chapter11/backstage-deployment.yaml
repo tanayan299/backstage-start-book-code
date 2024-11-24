@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backstage
+  namespace: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backstage
+  template:
+    metadata:
+      labels:
+        app: backstage
+    spec:
+      containers:
+        - name: backstage
+          image: ghcr.io/<GitHubユーザー名>/backstageimage:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7007
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: postgres_password
+            - name: GITHUB_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: github_clientId
+            - name: GITHUB_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: github_clientSecret
+            - name: GITHUB_APP_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: github_appId
+            - name: GITHUB_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: github_appPrivateKey
+            - name: BACKEND_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: backend_secret
+            - name: K3S_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: kube_cluster_token
+            # Multi Cluster 環境を可視化する際は以下を追記
+            # - name: K3S_TOKEN2
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: app-secret-from-vso
+            #       key: kube_cluster_token2
+      imagePullSecrets:
+        - name: regcred
