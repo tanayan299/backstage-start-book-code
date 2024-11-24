@@ -1,0 +1,74 @@
+# Backstage override configuration for your local development environment
+
+backend:
+  database:
+    # config options: https://node-postgres.com/apis/client
+    client: pg
+    connection:
+      host: localhost
+      port: 5432
+      user: postgres
+      password: secret
+
+# インストール先の環境に合わせて下記の設定を変更してください
+integrations:
+  # GitHub Personal Access Tokenを利用する場合
+  github:
+    - host: github.com
+      token: ghp_xxx # this should be the token from GitHub
+  # GitHub Appを利用する場合
+  github:
+    - host: github.com
+      apps:
+        - $include: github-credentials.yaml
+
+auth:
+  # see https://backstage.io/docs/auth/ to learn about auth providers
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: YOUR CLIENT ID
+        clientSecret: YOUR CLIENT SECRET
+        ## uncomment if using GitHub Enterprise
+        # enterpriseInstanceUrl: ${AUTH_GITHUB_ENTERPRISE_INSTANCE_URL}
+        signIn:
+          resolvers:
+          - resolver: usernameMatchingUserEntityName
+
+# 組織アカウントにGitHub Appsを追加した場合は以下をコメントアウトしてorgデータの取得間隔を設定してください
+# catalog:
+#   providers:
+#     githubOrg:
+#       id: 'github-local'
+#       githubUrl: 'https://github.com/<org名>'
+#       schedule:
+#         frequency:
+#           minutes: 60
+#         timeout:
+#           minutes: 5
+#         initialDelay:
+#           seconds: 10
+
+search:
+  pg:
+    highlightOptions:
+      useHighlight: true # Used to enable to disable the highlight feature. The default value is true
+      maxWord: 35 # Used to set the longest headlines to output. The default value is 35.
+      minWord: 15 # Used to set the shortest headlines to output. The default value is 15.
+      shortWord: 3 # Words of this length or less will be dropped at the start and end of a headline, unless they are query terms. The default value of three (3) eliminates common English articles.
+      highlightAll: false # If true the whole document will be used as the headline, ignoring the preceding three parameters. The default is false.
+      maxFragments: 0 # Maximum number of text fragments to display. The default value of zero selects a non-fragment-based headline generation method. A value greater than zero selects fragment-based headline generation (see the linked documentation above for more details).
+
+techdocs:
+  builder: 'local' # Alternatives - 'external'
+  publisher:
+    type: 'awsS3' # Alternatives - 'googleGcs' or 'awsS3'. Read documentation for using alternatives.
+    awsS3:
+      bucketName: 'your-backstage-bucket-name'
+
+aws:
+  accounts:
+    - accountId: '123456789012'
+      accessKeyId: ${AWS_ACCESS_KEY_ID}
+      secretAccessKey: ${AWS_SECRET_ACCESS_KEY}
