@@ -39,7 +39,6 @@ backend.add(
 
 // search plugin
 backend.add(import('@backstage/plugin-search-backend/alpha'));
-backend.add(import('@backstage/plugin-search-backend-module-pg/alpha'));
 
 // search engine
 // See https://backstage.io/docs/features/search/search-engines
