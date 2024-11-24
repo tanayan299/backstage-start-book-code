@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: backstage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:13.2-alpine
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: postgres_user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret-from-vso
+                  key: postgres_password
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdb
+              subPath: data
+      volumes:
+        - name: postgresdb
+          persistentVolumeClaim:
+            claimName: backstage-postgres-storage-claim

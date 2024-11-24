@@ -1,0 +1,13 @@
+---
+apiVersion: secrets.hashicorp.com/v1beta1
+kind: VaultAuth
+metadata:
+  name: app-vault-auth
+  namespace: backstage
+spec:
+  vaultConnectionRef: app-vault-connection
+  method: kubernetes
+  mount: kubernetes
+  kubernetes:
+    role: app # Vault上のRole
+    serviceAccount: app # Vault上の秘密情報を取得するためのService Account
